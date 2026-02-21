@@ -1,0 +1,14 @@
+# Disk images
+images/*.dsk
+images/*.img
+images/*.ima
+
+# Keep the directory
+!images/.gitkeep
+
+# Docker
+.env
+
+# OS files
+.DS_Store
+Thumbs.db

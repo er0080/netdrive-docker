@@ -1,0 +1,32 @@
+name: Docker Test Build
+
+on:
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Test Build
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: false
+          tags: mtcp-netdrive:test
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Test Run Container
+        run: |
+          docker run --rm -d --name netdrive-test mtcp-netdrive:test
+          sleep 5
+          docker logs netdrive-test
+          docker stop netdrive-test || true

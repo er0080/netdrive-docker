@@ -1,0 +1,26 @@
+version: '3.8'
+
+services:
+  netdrive:
+    build: .
+    image: mtcp-netdrive:latest
+    container_name: mtcp-netdrive
+    restart: unless-stopped
+
+    # Environment variables for configuration
+    environment:
+      - NETDRIVE_PORT=2002
+      - NETDRIVE_VERBOSE=false
+      - NETDRIVE_IMAGES_DIR=/data/images
+      - NETDRIVE_BIND_ADDRESS=0.0.0.0
+
+    # Port mapping (UDP)
+    ports:
+      - "2002:2002/udp"
+
+    # Volume for persistent disk images
+    volumes:
+      - ./images:/data/images
+
+    # Network mode
+    network_mode: bridge
