@@ -30,7 +30,7 @@ docker run -d \
 
 1. Clone this repository:
    ```bash
-   git clone https://github.com/YOUR_GITHUB_USERNAME/netdrive-docker.git
+   git clone https://github.com/er0080/netdrive-docker.git
    cd netdrive-docker
    ```
 
@@ -55,7 +55,7 @@ docker run -d \
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/YOUR_GITHUB_USERNAME/netdrive-docker.git
+   git clone https://github.com/er0080/netdrive-docker.git
    cd netdrive-docker
    ```
 
