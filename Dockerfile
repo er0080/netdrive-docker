@@ -3,15 +3,16 @@ FROM alpine:latest
 # Install ca-certificates for HTTPS downloads
 RUN apk add --no-cache ca-certificates wget unzip
 
-# Set NetDrive version
+# Set NetDrive version and architecture
 ARG NETDRIVE_VERSION=2025-01-10
 ARG NETDRIVE_URL=https://www.brutman.com/mTCP/download/mTCP_NetDrive_server-bin_${NETDRIVE_VERSION}.zip
+ARG TARGETARCH
 
 # Download and extract NetDrive server
 WORKDIR /tmp
 RUN wget ${NETDRIVE_URL} && \
     unzip mTCP_NetDrive_server-bin_${NETDRIVE_VERSION}.zip && \
-    mv NetDrive_server_linux_x86_64 /usr/local/bin/netdrive-server && \
+    mv mTCP_NetDrive_server-bin_${NETDRIVE_VERSION}/netdrive_linux_${TARGETARCH} /usr/local/bin/netdrive-server && \
     chmod +x /usr/local/bin/netdrive-server && \
     rm -rf /tmp/*
 
