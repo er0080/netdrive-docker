@@ -30,12 +30,12 @@ GitHub Actions builds two separate images (linux/amd64, linux/arm64) in parallel
 **Important**: Artifact names in GitHub Actions cannot contain forward slashes. The workflow sanitizes platform names (e.g., `linux/amd64` → `linux-amd64`) before uploading artifacts.
 
 ### Configuration Flow
-Environment variables → `entrypoint.sh` → NetDrive CLI flags:
-- `NETDRIVE_PORT` → `-port`
-- `NETDRIVE_VERBOSE` → `-verbose`
-- `NETDRIVE_BIND_ADDRESS` → `-addr`
+Environment variables → `entrypoint.sh` → NetDrive `serve` command with flags:
+- `NETDRIVE_PORT` → `-port <n>`
+- `NETDRIVE_IMAGES_DIR` → `-image_dir <dir>`
+- Always uses `-headless` flag for non-interactive Docker operation
 
-The entrypoint script builds command-line arguments dynamically and executes the NetDrive binary with `exec` (replacing the shell process for proper signal handling).
+The entrypoint script builds command-line arguments dynamically and executes the NetDrive binary with the `serve` command format: `netdrive-server serve -headless -port 2002 -image_dir /data/images`
 
 ## Common Commands
 
@@ -100,13 +100,24 @@ Required repository secrets for automated builds:
 - `DOCKERHUB_USERNAME` - Docker Hub username (er0080)
 - `DOCKERHUB_TOKEN` - Docker Hub access token with read/write/delete permissions
 
-### NetDrive Server Binary Arguments
-The mTCP NetDrive server accepts these flags (as of 2025-01-10):
-- `-port <num>` - UDP port to listen on
-- `-addr <ip>` - IP address to bind to
-- `-verbose` - Enable verbose logging
+### NetDrive Server Command Format
+The mTCP NetDrive server uses a command-based CLI (as of 2025-01-10):
 
-The server serves disk images from its current working directory, which is why `entrypoint.sh` does `cd "${NETDRIVE_IMAGES_DIR}"` before executing the binary.
+**Command format**: `netdrive [common_flags] command [command_flags] [args]`
+
+**For serving images** (what the container does):
+```bash
+netdrive serve -headless -port <n> -image_dir <dir>
+```
+
+**Key flags for `serve` command**:
+- `-port <n>` - UDP port to listen on (default: 2002)
+- `-image_dir <dir>` - Directory containing disk images (default: current dir)
+- `-headless` - Run in non-interactive mode (required for Docker)
+- `-timeout <n>` - Session timeout in minutes
+- `-max_active_sessions <n>` - Max concurrent sessions (default: 20)
+
+**Note**: The `-headless` flag is critical for Docker as it disables the interactive TUI console.
 
 ## File Structure
 

@@ -7,35 +7,28 @@ echo "mTCP NetDrive Server Container"
 echo "========================================="
 echo "Port: ${NETDRIVE_PORT}"
 echo "Images Directory: ${NETDRIVE_IMAGES_DIR}"
-echo "Bind Address: ${NETDRIVE_BIND_ADDRESS}"
-echo "Verbose: ${NETDRIVE_VERBOSE}"
 echo "========================================="
 
 # Ensure images directory exists
 mkdir -p "${NETDRIVE_IMAGES_DIR}"
 
-# Build command arguments
-CMD_ARGS=""
-
-if [ "${NETDRIVE_VERBOSE}" = "true" ]; then
-    CMD_ARGS="${CMD_ARGS} -verbose"
-fi
+# Build serve command arguments
+# Format: netdrive serve [flags]
+SERVE_ARGS="-headless"
 
 if [ -n "${NETDRIVE_PORT}" ]; then
-    CMD_ARGS="${CMD_ARGS} -port ${NETDRIVE_PORT}"
+    SERVE_ARGS="${SERVE_ARGS} -port ${NETDRIVE_PORT}"
 fi
 
-if [ -n "${NETDRIVE_BIND_ADDRESS}" ]; then
-    CMD_ARGS="${CMD_ARGS} -addr ${NETDRIVE_BIND_ADDRESS}"
+if [ -n "${NETDRIVE_IMAGES_DIR}" ]; then
+    SERVE_ARGS="${SERVE_ARGS} -image_dir ${NETDRIVE_IMAGES_DIR}"
 fi
 
-# Change to images directory
-cd "${NETDRIVE_IMAGES_DIR}"
-
-echo "Starting NetDrive server with args: ${CMD_ARGS}"
+echo "Starting NetDrive server with: serve ${SERVE_ARGS}"
 echo "Available disk images:"
 ls -lh "${NETDRIVE_IMAGES_DIR}"/ 2>/dev/null || echo "  (none yet)"
 echo "========================================="
 
-# Execute NetDrive server with arguments
-exec /usr/local/bin/netdrive-server ${CMD_ARGS}
+# Execute NetDrive server with serve command and arguments
+# Note: -headless flag is required for Docker (non-interactive mode)
+exec /usr/local/bin/netdrive-server serve ${SERVE_ARGS}

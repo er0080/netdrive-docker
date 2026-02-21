@@ -25,9 +25,7 @@ RUN chmod +x /entrypoint.sh
 
 # Environment variables with defaults
 ENV NETDRIVE_PORT=2002 \
-    NETDRIVE_VERBOSE=false \
-    NETDRIVE_IMAGES_DIR=/data/images \
-    NETDRIVE_BIND_ADDRESS=0.0.0.0
+    NETDRIVE_IMAGES_DIR=/data/images
 
 # Expose the NetDrive port (UDP)
 EXPOSE 2002/udp

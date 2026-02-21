@@ -71,7 +71,6 @@ docker run -d \
      -p 2002:2002/udp \
      -v $(pwd)/images:/data/images \
      -e NETDRIVE_PORT=2002 \
-     -e NETDRIVE_VERBOSE=false \
      mtcp-netdrive
    ```
 
@@ -82,9 +81,7 @@ Configure the NetDrive server using these environment variables:
 | Variable | Default | Description |
 |----------|---------|-------------|
 | `NETDRIVE_PORT` | `2002` | UDP port the server listens on |
-| `NETDRIVE_VERBOSE` | `false` | Enable verbose logging (`true`/`false`) |
 | `NETDRIVE_IMAGES_DIR` | `/data/images` | Directory containing disk images |
-| `NETDRIVE_BIND_ADDRESS` | `0.0.0.0` | Network interface to bind to |
 
 ## Connecting from DOS
 
@@ -150,7 +147,7 @@ nc -u <server-ip> 2002
 ```
 
 ### Enable verbose logging
-Set `NETDRIVE_VERBOSE=true` in your docker-compose.yml or environment variables.
+The server runs in headless mode by default in Docker. Check container logs with `docker-compose logs -f` to monitor server activity.
 
 ## Building from Source
 

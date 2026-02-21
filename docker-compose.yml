@@ -10,9 +10,7 @@ services:
     # Environment variables for configuration
     environment:
       - NETDRIVE_PORT=2002
-      - NETDRIVE_VERBOSE=false
       - NETDRIVE_IMAGES_DIR=/data/images
-      - NETDRIVE_BIND_ADDRESS=0.0.0.0
 
     # Port mapping (UDP)
     ports:
