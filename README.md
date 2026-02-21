@@ -23,7 +23,7 @@ docker run -d \
   --name mtcp-netdrive \
   -p 2002:2002/udp \
   -v $(pwd)/images:/data/images \
-  YOUR_DOCKERHUB_USERNAME/mtcp-netdrive:latest
+  er0080/mtcp-netdrive:latest
 ```
 
 ### Using Docker Compose (Recommended for local development)
