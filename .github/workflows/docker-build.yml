@@ -148,5 +148,16 @@ jobs:
       - name: Pull and test image
         run: |
           docker pull ${{ secrets.DOCKERHUB_USERNAME }}/mtcp-netdrive:latest
-          docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/mtcp-netdrive:latest /usr/local/bin/netdrive-server -h || true
-          echo "Image pulled and basic test completed"
+          # Test that the container starts and shows the startup banner
+          timeout 10 docker run --rm ${{ secrets.DOCKERHUB_USERNAME }}/mtcp-netdrive:latest > /tmp/test-output.txt 2>&1 || true
+          # Verify the server started correctly by checking for the banner
+          if grep -q "mTCP NetDrive Server Container" /tmp/test-output.txt && \
+             grep -q "Starting NetDrive server" /tmp/test-output.txt && \
+             grep -q "mTCP NetDrive by M Brutman" /tmp/test-output.txt; then
+            echo "✓ Image pulled and server startup validated successfully"
+            cat /tmp/test-output.txt
+          else
+            echo "✗ Server startup validation failed"
+            cat /tmp/test-output.txt
+            exit 1
+          fi
